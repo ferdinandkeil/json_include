@@ -66,6 +66,50 @@ as a normal JSON, it should be seen as:
 To ture JSON with include syntax into a normal JSON, a build process is needed,
 that's what the implementation does.
 
+*Updated Syntax*
+----------------
+
+json-include now supports merging of the included keys with pre-existing ones. If this file is
+given:
+
+.. code-block:: json
+
+    {
+        "username": "alice",
+        "profile": {
+            "gender": "female",
+            "admin": true,
+            "...": "<default_model.json>"
+        }
+    }
+
+and the included file reads as:
+
+.. code-block:: json
+
+    {
+        "admin": false,
+        "active": true
+    }
+
+then - after running json-include - you would be left with:
+
+.. code-block:: json
+
+    {
+        "username": "alice",
+        "profile": {
+            "gender": "female",
+            "admin": true,
+            "active": true
+        }
+    }
+
+This goes to show that settings in the including file always take precedence over ones in the
+included file.
+
+The syntax mentioned above still works as before.
+
 Python Implementation
 ---------------------
 

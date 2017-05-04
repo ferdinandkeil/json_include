@@ -33,14 +33,16 @@ def get_include_name(value):
 def walk_through_to_include(o, dirpath):
     if isinstance(o, dict):
         is_include_exp = False
-        if set(o) == set([INCLUDE_KEY]):
+        if o.has_key(INCLUDE_KEY):
             include_name = get_include_name(o.values()[0])
             if include_name:
                 is_include_exp = True
-                o.clear()
+                del o[INCLUDE_KEY]
                 if include_name not in _included_cache:
                     _included_cache[include_name] = parse_json_include(dirpath, include_name, True)
-                o.update(_included_cache[include_name])
+                include_c = _included_cache[include_name].copy()
+                include_c.update(o)
+                o.update(include_c)
 
         if is_include_exp:
             return
